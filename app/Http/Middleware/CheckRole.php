@@ -19,7 +19,7 @@ class CheckRole
       if ($request->user()->hasRole($roles) || !$roles){
         return $next($request);
       }
-      return redirect()->route('noPermission');
+      return redirect('noPermission'); //ben web.php lay tu day qua
     }
 
     private function getRequiredRoleForRoute($route)
