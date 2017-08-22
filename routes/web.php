@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/',['as'=>'/','uses'=>'LoginController@getLogin']);
+Route::post('/login',['as'=>'login','uses'=>'LoginController@postLogin']);
+
+
+Route::group(['middleware'=>['authen','roles']],function (){
+  Route::get('/dashboard',['as'=>'dashboard','uses'=>'DashboardController@dashboard']);
+  Route::get('/logout',['as'=>'logout','uses'=>'LoginController@getLogout']);
+});
