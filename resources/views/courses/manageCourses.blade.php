@@ -2,6 +2,7 @@
 @section('content')
 @include('courses.popup.academic')
 @include('courses.popup.program')
+@include('courses.popup.level')
   <div class="row">
     <div class="col-lg-12">
       <h3 class="page-header"><i class="fa fa-file-text-o"></i> Courses</h3>
@@ -22,7 +23,7 @@
         <header class="panel-heading">
           Manage Courses
         </header>
-        <form class="form-horizontal">
+        <form class="form-horizontal" id="frm-create-class">
           <div class="panel panel-body" style="border-bottom: 1px solid #ccc;">
             <div class="form-group">
 
@@ -30,9 +31,9 @@
                 <label for="academic-year">Academic Year</label>
                 <div class="input-group">
                   <select class="form-control" name="academic_id" id="academic_id">
-                    <option value="">---None---</option>
+                    <option value="">-----None-----</option>
                     @foreach($academic as $ac)
-                      <option value="{{$ac->program_id}}">{{$ac->academic}}</option>
+                      <option value="{{$ac->academic_id}}">{{$ac->academic}}</option>
                       @endforeach
                   </select>
                   <div class="input-group-addon">
@@ -45,9 +46,9 @@
                 <label for="program">Courses</label>
                 <div class="input-group">
                   <select class="form-control" name="program_id" id="program_id">
-                    <option value="">---None---</option>
+                    <option value="">-----None-----</option>
                     @foreach($program as $pr)
-                      <option value="{{$pr->academic_id}}">{{$pr->program}}</option>
+                      <option value="{{$pr->program_id}}">{{$pr->program}}</option>
                     @endforeach
                   </select>
                   <div class="input-group-addon">
@@ -60,10 +61,13 @@
                 <label for="level">Level</label>
                 <div class="input-group">
                   <select class="form-control" name="level_id" id="level_id">
-
+                    {{--<option value="">-----None-----</option>--}}
+                  {{--@foreach($level as $lv)--}}
+                      {{--<option value="{{$lv->level_id}}">{{$lv->level}}</option>--}}
+                    {{--@endforeach--}}
                   </select>
                   <div class="input-group-addon">
-                    <span class="fa fa-plus"></span>
+                    <span class="fa fa-plus" id="add-more-level"></span>
                   </div>
                 </div>
               </div>
@@ -156,8 +160,7 @@
         changeMonth:true,
         changeYear:true,
       });
-
-      //=============================================
+//=====================================================================================
     $('#add-more-acacdemic').on('click',function () {
       $('#academic-year-show').modal();
     });
@@ -166,8 +169,6 @@
     $('.btn-save-academic').on('click',function () {
       var academic = $('#new_academic').val();
       $.post("{{route('postInsertAcademic')}}",{ academic:academic},function (data) {
-        console.log(data);
-
         $('#academic_id').append($("<option/>",{
           value : data.academic_id,
           text : data.academic
@@ -175,7 +176,7 @@
         $('#new_academic').val("");
       });
     });
-    //==============================================
+//=======================================================================
     $('#add-more-program').on('click',function () {
       $('#program-show').modal();
     });
@@ -184,8 +185,6 @@
       var program = $('#program').val();
       var description = $('#description').val();
       $.post("{{route('postInsertProgram')}}",{ program:program,description:description },function (data) {
-        console.log(data);
-
         $('#program_id').append($("<option/>",{
           value : data.program_id,
           text : data.program
@@ -194,5 +193,45 @@
         $('#description').val("");
       });
     });
+//====================================================================================
+      $('#frm-create-class #program_id').on('change',function (e) {
+        var program_id = $(this).val();
+        var level = $('#level_id');
+        $(level).empty();
+        $.get("{{route('showLevel')}}",{program_id:program_id},function (data) {
+            console.log(data);
+          $('#level').append($('<option/>',{
+            value :data.level_id,
+            text : data.level
+          }))
+        })
+      });
+    //======
+      $('#add-more-level').on('click',function () {
+
+      var programs = $('#program_id option');
+      var program  = $('#frm-level-cerate').find('#program_id');//find id level.blade.php
+      $(program).empty();
+      $.each(programs,function (i,pro) {
+        $(program).append($("<option/>",{
+          value : $(pro).val(),
+          text : $(pro).text()
+        }));
+      });
+      $('#level-show').modal('show');
+    });
+    //======
+      $('#frm-level-cerate').on('submit',function (e) {
+        e.preventDefault();//ngăn cản trình duyệt thực thi hành động mặc định
+        var data = $(this).serialize();
+        var url  = $(this).attr('action');
+        $.post(url,data,function (data) {
+          $('#level_id').append($("<option/>",{
+            value : data.level_id,
+            text : data.level
+          }));
+        });
+      });
+//=========================================================================================
   </script>
   @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Academic;
 use App\Program;
+use App\Level;
 class CoursesController extends Controller
 {
     public function __construct() {
@@ -14,7 +15,12 @@ class CoursesController extends Controller
     public function getManageCourses(){
       $program = Program::all();
       $academic = Academic::orderBy('academic','DESC')->get();
-      return view('courses.manageCourses',['program'=>$program,'academic'=>$academic]);
+      $level = Level::all();
+      return view('courses.manageCourses',[
+        'program'=>$program,
+        'academic'=>$academic,
+        'level'=>$level
+      ]);
     }
 
     public function postInsertAcademic(Request $request)
@@ -32,6 +38,22 @@ class CoursesController extends Controller
       {
 
         return response(Program::create($request->all()));
+      }
+    }
+
+    public function postInsertLevel(Request $request)
+    {
+     if ($request->ajax())
+     {
+       return response(Level::create($request->all()));
+     }
+    }
+
+    public function showLevel(Request $request)
+    {
+      if ($request->ajax())
+      {
+        return response(Level::find($request->program_id));
       }
     }
 }
