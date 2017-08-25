@@ -32,5 +32,14 @@ Route::group(['middleware'=>['authen','roles'],'roles'=>['admin']],function (){
   Route::post('manage/courese/insert-level',['as'=>'postInsertLevel','uses'=>'CoursesController@postInsertLevel']);
 
   Route::get('manage/courses/showLevel',['as'=>'showLevel','uses'=>'CoursesController@showLevel']);
+
+  Route::post('manage/courese/shift',['as'=>'createShift','uses'=>'CoursesController@createShift']);
+  Route::post('manage/courese/time',['as'=>'createTime','uses'=>'CoursesController@createTime']);
+  Route::post('manage/courese/batch',['as'=>'createBatch','uses'=>'CoursesController@createBatch']);
+  Route::post('manage/courese/group',['as'=>'createGroup','uses'=>'CoursesController@createGroup']);
+  Route::post('manage/courese/class',['as'=>'createClass','uses'=>'CoursesController@createClass']);
+
+  Route::get('manage/courese/classinfo',['as'=>'showClassInfomation','uses'=>'CoursesController@showClassInfomation']);
+
 });
 
