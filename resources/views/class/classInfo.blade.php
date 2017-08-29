@@ -1,4 +1,17 @@
-<table class="table table-hover table-striped table-condensed" id="table-class-info">
+<style type="text/css">
+  .academic-detail{
+    white-space: normal;
+    width: 400px;
+  }
+  #table-class-info{
+    width: 100%;}
+  table tbody > tr >td{
+    vertical-align: middle;
+  }
+
+</style>
+
+<table class="table-hover table-striped table-condensed table-bordered" id="table-class-info">
   <thead>
   <tr>
     <th>Program</th>
@@ -6,6 +19,7 @@
     <th>Shift</th>
     <th>Time</th>
     <th>Academic Detail</th>
+    <th>Actison</th>
   </tr>
   </thead>
   <tbody>
@@ -16,7 +30,7 @@
         <td>{{$c->shift}}</td>
         <td>{{$c->time}}</td>
         <td>
-          <a href="#" data-id="{{$c->class_id}}">
+          <a href="#" data-id="{{$c->class_id}}" id="class-edit">
             Program : {{$c->program}}/
             Level :{{$c->level}}/
             Shift :{{$c->shift}}/
@@ -26,6 +40,9 @@
             StartDate : {{date("d-M-y",strtotime($c->srart_date))}}/
             EndDate : {{date("d-M-Y",strtotime($c->end_date))}}/
           </a>
+        </td>
+        <td style="vertical-align: middle;width: 50px;">
+          <button value="{{$c->class_id}}" class="btn btn-danger btn-sm del-class">Del</button>
         </td>
       </tr>
       @endforeach

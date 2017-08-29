@@ -21,8 +21,8 @@ class CreateClassesTable extends Migration
             $table->integer('time_id')->unsigned();
             $table->integer('group_id')->unsigned();
             $table->integer('batch_id')->unsigned();
-            $table->date('start_day');
-            $table->date('end_day');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->boolean('active');
             $table->foreign('academic_id')->references('academic_id')->on('academics');
             $table->foreign('level_id')->references('level_id')->on('levels');

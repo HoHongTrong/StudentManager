@@ -40,6 +40,12 @@ Route::group(['middleware'=>['authen','roles'],'roles'=>['admin']],function (){
   Route::post('manage/courese/class',['as'=>'createClass','uses'=>'CoursesController@createClass']);
 
   Route::get('manage/courese/classinfo',['as'=>'showClassInfomation','uses'=>'CoursesController@showClassInfomation']);
+  Route::post('manage/courese/class/delete',['as'=>'deleteClass','uses'=>'CoursesController@deleteClass']);
+  Route::get('manage/courese/class/edit',['as'=>'editClass','uses'=>'CoursesController@editClass']);
+  Route::post('manage/courese/class/update',['as'=>'updateClassInfo','uses'=>'CoursesController@updateClassInfo']);
+
+  //==========================Student Register===================
+  Route::get('student/getregister',['as'=>'getStudentRegister','uses'=>'StudentController@getStudentRegister']);
 
 });
 

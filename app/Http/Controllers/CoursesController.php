@@ -11,6 +11,8 @@ use App\Time;
 use App\Batch;
 use App\Group;
 use App\MyClass;
+use function Sodium\compare;
+
 class CoursesController extends Controller
 {
     public function __construct() {
@@ -91,17 +93,36 @@ class CoursesController extends Controller
 //===============================================================
   public function showClassInfomation(Request $request)
   {
-    return response($this->ClassInformation()->get());
+    $classes = $this->ClassInformation()->get();
+    return view('class.classInfo',['classes'=>$classes]);
   }
 //===============================================================
   public function ClassInformation(){
-    $classes = MyClass::join('academics', 'academics.academic_id', '=', 'classes.academic_id')
+    return MyClass::join('academics', 'academics.academic_id', '=', 'classes.academic_id')
       ->join('levels','levels.level_id','=','classes.level_id')
+      ->join('programs','programs.program_id','=','levels.program_id')
       ->join('shifts','shifts.shift_id','=','classes.shift_id')
       ->join('times','times.time_id','=','classes.time_id')
       ->join('groups','groups.group_id','=','classes.group_id')
-      ->join('batches','batches.batch_id','=','classes.batch_id');
-    return view('class.classInfo',compact('classes'));
+      ->join('batches','batches.batch_id','=','classes.batch_id')
+      ->orderBy('classes.class_id','DESC');
+  }
+
+  public function deleteClass(Request $request){
+    if ($request->ajax()){
+      MyClass::destroy($request->class_id);
+    }
+  }
+
+  public function editClass(Request $request){
+    if ($request->ajax()){
+      return response(MyClass::find($request->class_id));
+    }
+  }
+
+  public function updateClassInfo(Request $request){
+
+    return response(MyClass::updateOrCreate(['class_id'=>$request->class_id],$request->all()));
   }
 
 }
