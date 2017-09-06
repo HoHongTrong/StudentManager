@@ -116,7 +116,7 @@ class CoursesController extends Controller {
         'groups.group_id' => $request->group_id);
     }
     $classes = $this->ClassInformation($criterial)->get();
-    return view('class.classInfo', compact('classes'));
+    return view('class.classInfo', ['classes'=>$classes]);
   }
 
 //===============================================================

@@ -75,7 +75,7 @@
           <div class="panel-heading">
             <a data-toggle="collapse" data-parent="#accordion" href="#collapsel" style="text-decoration: none;">Choose
               Academic</a>
-            <a href="#" class="pull-right"><i class="fa fa-plus"></i> </a>
+            <a href="#" class="pull-right" id="show-class-info"><i class="fa fa-plus"></i> </a>
           </div>
           <div id="collapsel" class="panel-collapse collapse in">
             <div class="panel-body academic-detail"><p></p></div>
@@ -290,18 +290,72 @@
       </div>
     </div>
   </div>
-
+  @include('class.classPopup')
 @endsection
-
 @section('script')
   <script type="text/javascript">
+    //==========================================================
+    $('#academic_id').on('change', function (e) {
+      showClassInfo();
+    });
+    //=========================================
+    $('#level_id').on('change', function (e) {
+      showClassInfo();
+    });
+    //=========================================
+    $('#shift_id').on('change', function (e) {
+      showClassInfo();
+    });
+    //=========================================
+    $('#time_id').on('change', function (e) {
+      showClassInfo();
+    });
+    //=========================================
+    $('#batch_id').on('change', function (e) {
+      showClassInfo();
+    });
+    //=========================================
+    $('#group_id').on('change', function (e) {
+      showClassInfo();
+    });
+    //=================================================
+    $('#show-class-info').on('click', function (e) {
+      e.preventDefault();
+      $('#choose-academic').modal();
+    });
+    //========================= Level =============================================================
+    $("#frm-view-class #program_id").on('change', function (e) {
+      var program_id = $(this).val();
+      var level = $('#level_id')
+      $(level).empty();
+      $.get("{{route('showLevel')}}", {program_id: program_id}, function (data) {
+
+        $.each(data, function (i, l) {
+          $(level).append($("<option/>", {
+            value: l.level_id,
+            text: l.level
+          }))
+        });
+        showClassInfo();
+      })
+    });
+    //---------------------------------------------------------
+    function showClassInfo() {
+      var data = $('#frm-view-class').serialize();
+      $.get("{{route('showClassInfomation')}}", data, function (data) {
+        $('#add-class-info').empty().append(data);
+        MergeCommonRows($('#table-class-info'));
+
+      })
+    }
+    //=============== browse photo ======================
     $('#browse_file').on('click', function () {
       $('#photo').click();
     })
     $('#photo').on('change', function (e) {
       showFile(this, '#showPhoto');
     })
-
+    //=======================================================
     function showFile(fileInput, img, showName) {
       if (fileInput.file[0]) {
         var reader = new FileReader();
@@ -313,5 +367,25 @@
       $(showName).text(fileInput.files[0].name)
     }
     ;
+    //=================================================
+    function MergeCommonRows(table) {
+      var firstColumnBrakes = [];
+      $.each(table.find('th'), function (i) {
+        var previous = null, cellToExtend = null, rowspan = 1;
+        table.find("td:nth-child(" + i + ")").each(function (index, e) {
+          var jthis = $(this), content = jthis.text();
+          if (previous == content && content !== "" && $.inArray(index, firstColumnBrakes) === -1) {
+            jthis.addClass('hidden');
+            cellToExtend.attr("rowspan", (rowspan = rowspan + 1));
+          } else {
+            if (i === 1) firstColumnBrakes.push(index);
+            rowspan = 1;
+            previous = content;
+            cellToExtend = jthis;
+          }
+        });
+      });
+      $('td.hidden').remove();
+    }
   </script>
 @endsection
