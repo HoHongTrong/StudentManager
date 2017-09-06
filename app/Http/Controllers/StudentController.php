@@ -9,4 +9,9 @@ class StudentController extends Controller
     public function getStudentRegister(){
       return view('student.studentRegister');
     }
+
+    public function postStudentRegister(Request $request){
+
+     dump($request->all());
+    }
 }

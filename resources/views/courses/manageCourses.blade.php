@@ -37,7 +37,6 @@
                 <label for="academic-year">Academic Year</label>
                 <div class="input-group">
                   <select class="form-control" name="academic_id" id="academic_id">
-                    <option value="">-----None-----</option>
                     @foreach($academic as $ac)
                       <option value="{{$ac->academic_id}}">{{$ac->academic}}</option>
                       @endforeach
@@ -67,10 +66,7 @@
                 <label for="level">Level</label>
                 <div class="input-group">
                   <select class="form-control" name="level_id" id="level_id">
-                    {{--<option value="">-----None-----</option>--}}
-                  {{--@foreach($level as $lv)--}}
-                      {{--<option value="{{$lv->level_id}}">{{$lv->level}}</option>--}}
-                    {{--@endforeach--}}
+
                   </select>
                   <div class="input-group-addon">
                     <span class="fa fa-plus" id="add-more-level"></span>
@@ -180,13 +176,40 @@
 @section('script')
   <script type="text/javascript">
 
-    showClassInfo($('#academic_id').val());
+    showClassInfo();
 
       $('#start_date').datepicker({
         changeMonth:true,
         changeYear:true,
         dateFormat : 'yy-mm-dd'
       });
+      //======================================
+    $('#academic_id').on('change',function (e) {
+      showClassInfo();
+    });
+    //=========================================
+    $('#level_id').on('change',function (e) {
+      showClassInfo();
+    });
+    //=========================================
+    $('#shift_id').on('change',function (e) {
+      showClassInfo();
+    });
+    //=========================================
+    $('#time_id').on('change',function (e) {
+      showClassInfo();
+    });
+    //=========================================
+    $('#batch_id').on('change',function (e) {
+      showClassInfo();
+    });
+    //=========================================
+    $('#group_id').on('change',function (e) {
+      showClassInfo();
+    });
+    //=========================================
+
+
       $('#end_date').datepicker({
         changeMonth:true,
         changeYear:true,
@@ -230,14 +253,14 @@
         $(level).empty();
         $.get("{{route('showLevel')}}",{program_id:program_id},function (data) {
             
-          $.each(data,function (i,le) {
+          $.each(data,function (i,l) {
             $(level).append($("<option/>",{
-              value :le.level_id,
-              text : le.level
+              value :l.level_id,
+              text : l.level
             }))
-          })
+          });
+          showClassInfo();
         })
-        $(this).trigger('reset');
       });
     //======
       $('#add-more-level').on('click',function () {
@@ -346,9 +369,9 @@
       })
     });
     //=======
-    function showClassInfo(academic_id) {
-      $.get("{{route('showClassInfomation')}}",{academic_id:academic_id},function (data) {
-
+    function showClassInfo() {
+      var data = $('#frm-create-class').serialize();
+      $.get("{{route('showClassInfomation')}}",data,function (data) {
         $('#add-class-info').empty().append(data);
         MergeCommonRows($('#table-class-info'));
 

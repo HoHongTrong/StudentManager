@@ -46,5 +46,6 @@ Route::group(['middleware'=>['authen','roles'],'roles'=>['admin']],function (){
 
   //==========================Student Register===================
   Route::get('student/getregister',['as'=>'getStudentRegister','uses'=>'StudentController@getStudentRegister']);
+  Route::post('student/postregister',['as'=>'postStudentRegister','uses'=>'StudentController@postStudentRegister']);
 });
 
