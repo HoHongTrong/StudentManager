@@ -19,7 +19,7 @@
     <th>Shift</th>
     <th>Time</th>
     <th>Academic Detail</th>
-    <th>Actison</th>
+    <th hidden="hidden">Actison</th>
   </tr>
   </thead>
   <tbody>
@@ -41,7 +41,7 @@
             EndDate : {{date("d-M-Y",strtotime($c->end_date))}}/
           </a>
         </td>
-        <td style="vertical-align: middle;width: 50px;">
+        <td style="vertical-align: middle;width: 50px;" id="hidden">
           <button value="{{$c->class_id}}" class="btn btn-danger btn-sm del-class">Del</button>
         </td>
       </tr>

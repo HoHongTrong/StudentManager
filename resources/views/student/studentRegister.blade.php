@@ -294,6 +294,7 @@
 @endsection
 @section('script')
   <script type="text/javascript">
+    showClassInfo();
     //==========================================================
     $('#academic_id').on('change', function (e) {
       showClassInfo();
@@ -344,6 +345,7 @@
       var data = $('#frm-view-class').serialize();
       $.get("{{route('showClassInfomation')}}", data, function (data) {
         $('#add-class-info').empty().append(data);
+        $('td#hidden').add
         MergeCommonRows($('#table-class-info'));
 
       })
